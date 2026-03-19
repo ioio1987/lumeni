@@ -1,0 +1,13 @@
+# Runtime logs
+Logs/
+*.log
+
+# Local/development config
+appsettings.Development.json
+
+# Local signing key (sensitive)
+tempkey.jwk
+
+# Optional local environment files
+.env
+.env.*
