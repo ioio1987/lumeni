@@ -1,21 +1,22 @@
-# Build სტადია
+# Build 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# კოდის დაკოპირება და Restore
-COPY ["Syllogia.AuthServer/Syllogia.AuthServer.csproj", "Syllogia.AuthServer/"]
-RUN dotnet restore "Syllogia.AuthServer/Syllogia.AuthServer.csproj"
+# ყურადღება: ბილიკი უნდა ემთხვეოდეს GitHub-ზე არსებულ ფოლდერს
+COPY ["UserManagement.API/UserManagement.API.csproj", "UserManagement.API/"]
+RUN dotnet restore "UserManagement.API/UserManagement.API.csproj"
 
 COPY . .
-WORKDIR "/src/Syllogia.AuthServer"
-RUN dotnet publish -c Release -o /app/publish
+WORKDIR "/src/UserManagement.API"
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
-# Run სტადია
+# Run 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# პორტი, რომელსაც კონტეინერი გამოიყენებს შიგნით
+# პორტი
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "Syllogia.AuthServer.dll"]
+# დარწმუნდით რომ DLL-ის სახელი ზუსტია
+ENTRYPOINT ["dotnet", "UserManagement.API.dll"]
