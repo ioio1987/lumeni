@@ -9,12 +9,12 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__Postgres_AuthServer=Host=postgres_db;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
+      - ConnectionStrings__Postgres_AuthServer=Host=postgresql-gfww-postgresql-1;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
       - RabbitMqOptions__Host=erp_rabbitmq
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=erp-common-network"
-      - "traefik.http.routers.auth-server.rule=Host(`login.syllogia.ge)"
+      - "traefik.http.routers.auth-server.rule=Host(`login.syllogia.ge`)"
       - "traefik.http.routers.auth-server.entrypoints=websecure"
       - "traefik.http.routers.auth-server.tls=true"
       - "traefik.http.routers.auth-server.tls.certresolver=letsencrypt"
