@@ -1,21 +1,3 @@
-version: '3.8'
-
-services:
-  user-management:
-    build:
+build:
       context: .
-      dockerfile: UserManagement.API/Dockerfile
-    container_name: user_management_api
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__Postgres_AuthServer=Host=postgres_db;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
-      - RabbitMqOptions__Host=erp_rabbitmq
-    networks:
-      - erp-common-network
-    ports:
-      - "5001:8080"
-
-networks:
-  erp-common-network:
-    external: true
+      dockerfile: Dockerfile
