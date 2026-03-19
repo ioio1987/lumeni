@@ -1,18 +1,24 @@
 version: '3.8'
 
 services:
-  user-management-api:
+  auth-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: user_management_api
+    container_name: auth_service
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
- 
-      - ConnectionStrings__Postgres_AuthServer=Host=postgresql-gfww-postgresql-1;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
-
+      - ConnectionStrings__Postgres_AuthServer=Host=postgres_db;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
       - RabbitMqOptions__Host=erp_rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=erp-common-network"
+      - "traefik.http.routers.auth-server.rule=Host(`auth.yourdomain.com`)"
+      - "traefik.http.routers.auth-server.entrypoints=websecure"
+      - "traefik.http.routers.auth-server.tls=true"
+      - "traefik.http.routers.auth-server.tls.certresolver=myresolver"
+      - "traefik.http.services.auth-server.loadbalancer.server.port=8080"
     networks:
       - erp-common-network
     ports:
