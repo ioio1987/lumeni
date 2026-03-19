@@ -9,18 +9,34 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+      # .NET-ისთვის აუცილებელია, რომ Traefik-ისგან გადმოცემული HTTPS დაინახოს
+      - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true 
       - ConnectionStrings__Postgres_AuthServer=Host=postgresql-gfww-postgresql-1;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
       - RabbitMqOptions__Host=erp_rabbitmq
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=erp-common-network"
+      
+      # 1. HTTP Router (პორტი 80 - ავტომატური გადამისამართებისთვის)
+      - "traefik.http.routers.auth-server-http.rule=Host(`login.syllogia.ge`)"
+      - "traefik.http.routers.auth-server-http.entrypoints=web"
+      - "traefik.http.routers.auth-server-http.middlewares=https-redirect"
+
+      # 2. HTTPS Router (პორტი 443 - სერტიფიკატით)
       - "traefik.http.routers.auth-server.rule=Host(`login.syllogia.ge`)"
       - "traefik.http.routers.auth-server.entrypoints=websecure"
       - "traefik.http.routers.auth-server.tls=true"
       - "traefik.http.routers.auth-server.tls.certresolver=letsencrypt"
+      
+      # 3. Middleware: HTTP-დან HTTPS-ზე გადასასვლელად
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      
+      # 4. შიდა პორტი
       - "traefik.http.services.auth-server.loadbalancer.server.port=8080"
     networks:
       - erp-common-network
+    # ports სექცია რეალურად აღარ გჭირდებათ, რადგან Traefik პორტ 80/443-ზე მუშაობს
+    # მაგრამ თუ ტესტირებისთვის გინდათ, დატოვეთ.
     ports:
       - "5001:8080"
 
