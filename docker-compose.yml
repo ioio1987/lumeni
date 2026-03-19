@@ -1,10 +1,12 @@
 version: '3.8'
+
 services:
-  auth-service:
+  user-management:
     build:
       context: .
-      dockerfile: UserManagement.API/Dockerfile # set correct path to Dockerfile
-    container_name: auth_service
+      dockerfile: UserManagement.API/Dockerfile
+    container_name: user_management_api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ConnectionStrings__Postgres_AuthServer=Host=postgres_db;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
