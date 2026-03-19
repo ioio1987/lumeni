@@ -1,14 +1,13 @@
 version: '3.8'
 services:
-  user-management:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  user-management-api:
+    image: [თქვენი_image_მისამართი] # მაგ: ghcr.io/username/repo:latest
     container_name: user_management_api
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__Postgres_AuthServer=Host=postgres_db;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
+      # ვიყენებთ ზუსტ სახელს: postgresql-gfww-postgresql-1
+      - ConnectionStrings__Postgres_AuthServer=Host=postgresql-gfww-postgresql-1;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
       - RabbitMqOptions__Host=erp_rabbitmq
     networks:
       - erp-common-network
