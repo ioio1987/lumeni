@@ -13,6 +13,7 @@ services:
       - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true 
       - ConnectionStrings__Postgres_AuthServer=Host=postgresql-gfww-postgresql-1;Port=5432;Database=AuthServer;Username=admin;Password=Syllogia123
       - RabbitMqOptions__Host=erp_rabbitmq
+      - BrevoOptions__ApiKey=${BREVO_API_KEY}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=erp-common-network"
