@@ -36,6 +36,8 @@ services:
       - "traefik.http.services.auth-server.loadbalancer.server.port=8080"
     networks:
       - erp-common-network
+    volumes:
+      - auth_data_protection_keys:/root/.aspnet/DataProtection-Keys
     # ports სექცია რეალურად აღარ გჭირდებათ, რადგან Traefik პორტ 80/443-ზე მუშაობს
     # მაგრამ თუ ტესტირებისთვის გინდათ, დატოვეთ.
     ports:
@@ -44,3 +46,6 @@ services:
 networks:
   erp-common-network:
     external: true
+
+volumes:
+  auth_data_protection_keys:
